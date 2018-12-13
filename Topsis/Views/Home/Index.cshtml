@@ -1,0 +1,359 @@
+﻿@{}
+
+@{
+    ViewBag.Title = "Index";
+    double[,] kararMatrisi = (double[,])TempData["karaMatrisi"];
+    double[,] skararMatrisi = (double[,])TempData["sKararMatrisi"];
+    double[,] aStandartKararMatrisi = (double[,])TempData["aStandartKararMatrisi"];
+    double[] idealAyrim = (double[])TempData["iAyrım"];
+    double[] negatifIdealAyrim = (double[])TempData["negatifIdealAyrim"];
+    double[] sonuc = (double[])TempData["sonuc"];
+    double[] sonucSirali = (double[])TempData["sonucSirali"];
+    string[] sonuclar = (string[])TempData["sonuclar"];
+}
+
+
+
+<div class="jumbotron">
+    <h1 class="display-4"> Arsa Seçiçi 2000</h1>
+    <p class="lead">Bu Program İnsanların daha iyi Yatırm  yapması için geliştirilmiştir.Topsis yöntemi  kullanılarak  oluşturulmuştur</p>
+    <hr class="my-4">
+
+    <p>CANGÜLLER bilişim.Aş hiç bir sekilde secilen karardan dolayı sorumluluk Kabul etmemektedir.</p>
+</div>
+<h3>Asagıdaki tabloyu uygun degelerle doldurunuz</h3>
+@using (Html.BeginForm())
+{
+
+
+    <table class="table">
+        <thead>
+            <tr class="accordion">
+                <th scope="col"><input class="form-control" type="text" value="0,1" name="W1" placeholder="W0 Giriniz..." /> </th>
+                <th scope="col"><input class="form-control" type="text" value="0,2" name="W2" placeholder="W1 Giriniz..." /> </th>
+                <th scope="col"><input class="form-control" type="text" value="0,3" name="W3" placeholder="W2 Giriniz..." /></th>
+                <th scope="col"><input class="form-control" type="text" value="0,2" name="W4" placeholder="W3 Giriniz..." /></th>
+                <th scope="col"><input class="form-control" type="text" value="0,2" name="W5" placeholder="W4 Giriniz..." /> </th>
+
+            </tr>
+        </thead>
+    </table>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nufus </th>
+                <th scope="col">Okul Sayisi </th>
+                <th scope="col">Hastane sayisi</th>
+                <th scope="col">Sehir Merkazine Uzaklık </th>
+                <th scope="col">AVM  Sayisi  </th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <th scope="row">Bilge Kaan Mahallesi</th>
+                <td><input class="form-control" type="text" value="1000" name="a1" id="a1" /></td>
+                <td><input class="form-control" type="text" value="3" name="a2" /></td>
+                <td><input class="form-control" type="text" value="3" name="a3" /></td>
+                <td><input class="form-control" type="text" value="2" name="a4" /></td>
+                <td><input class="form-control" type="text" value="4" name="a5" /></td>
+            </tr>
+            <tr>
+                <th scope="row">Fatih Sultan Mehmet Han Mahallesi</th>
+                <td><input class="form-control" type="text" value="2000" name="a6" /></td>
+                <td><input class="form-control" type="text" value="8" name="a7" /></td>
+                <td><input class="form-control" type="text" value="7" name="a8" /></td>
+                <td><input class="form-control" type="text" value="1" name="a9" /></td>
+                <td><input class="form-control" type="text" value="10" name="a10" /></td>
+            </tr>
+            <tr>
+                <th scope="row">Cengizhan Mahallesi</th>
+                <td><input class="form-control" type="text" value="1300" name="a11" /></td>
+                <td><input class="form-control" type="text" value="1" name="a12" /></td>
+                <td><input class="form-control" type="text" value="13" name="a13" /></td>
+                <td><input class="form-control" type="text" value="1" name="a14" /></td>
+                <td><input class="form-control" type="text" value="7" name="a15" /></td>
+            </tr>
+            <tr>
+                <th scope="row">Gümüşhaneliler Mahallesi</th>
+                <td><input class="form-control" type="text" value="1100" name="a16" /></td>
+                <td><input class="form-control" type="text" value="7" name="a17" /></td>
+                <td><input class="form-control" type="text" value="8" name="a18" /></td>
+                <td><input class="form-control" type="text" value="2" name="a19" /></td>
+                <td><input class="form-control" type="text" value="8" name="a20" /></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td> <button id="button1" style="width:300px;" class="btn btn-success" type="submit"> Hesapla</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+}
+
+@if (TempData["karaMatrisi"] != null)
+{
+    <h3 style="color:red">1.Adım:Karar Matrisinin (R) Oluşturulması</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nufus </th>
+                <th scope="col">Okul Sayisi </th>
+                <th scope="col">Hastane sayisi</th>
+                <th scope="col">Sehir Merkazine Uzaklık </th>
+                <th scope="col">AVM  Sayisi  </th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <th scope="row">Bilge Kaan Mahallesi</th>
+                <td>@kararMatrisi[0, 0]</td>
+                <td>@kararMatrisi[0, 1]</td>
+                <td>@kararMatrisi[0, 2]</td>
+                <td>@kararMatrisi[0, 3]</td>
+                <td>@kararMatrisi[0, 4]</td>
+            </tr>
+            <tr>
+                <th scope="row">Fatih Sultan Mehmet Han Mahallesi</th>
+                <td>@kararMatrisi[1, 0]</td>
+                <td>@kararMatrisi[1, 1]</td>
+                <td>@kararMatrisi[1, 2]</td>
+                <td>@kararMatrisi[1, 3]</td>
+                <td>@kararMatrisi[1, 4]</td>
+            </tr>
+            <tr>
+                <th scope="row">Cengizhan Mahallesi</th>
+                <td>@kararMatrisi[2, 0]</td>
+                <td>@kararMatrisi[2, 1]</td>
+                <td>@kararMatrisi[2, 2]</td>
+                <td>@kararMatrisi[2, 3]</td>
+                <td>@kararMatrisi[2, 4]</td>
+            </tr>
+            <tr>
+                <th scope="row">Gümüşhaneliler Mahallesi</th>
+                <td>@kararMatrisi[3, 0]</td>
+                <td>@kararMatrisi[3, 1]</td>
+                <td>@kararMatrisi[3, 2]</td>
+                <td>@kararMatrisi[3, 3]</td>
+                <td>@kararMatrisi[3, 4]</td>
+            </tr>
+
+
+        </tbody>
+    </table>
+
+}
+@if (TempData["aStandartKararMatrisi"] != null)
+{
+    <h3 style="color:red">2.Adım:Standart Karar Matrisinin (R) Oluşturulması</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nufus </th>
+                <th scope="col">Okul Sayisi </th>
+                <th scope="col">Hastane sayisi</th>
+                <th scope="col">Sehir Merkazine Uzaklık </th>
+                <th scope="col">AVM  Sayisi  </th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <th scope="row">Bilge Kaan Mahallesi</th>
+                <td>@aStandartKararMatrisi[0, 0]</td>
+                <td>@aStandartKararMatrisi[0, 1]</td>
+                <td>@aStandartKararMatrisi[0, 2]</td>
+                <td>@aStandartKararMatrisi[0, 3]</td>
+                <td>@aStandartKararMatrisi[0, 4]</td>
+            </tr>
+            <tr>
+                <th scope="row">Fatih Sultan Mehmet Han Mahallesi</th>
+                <td>@aStandartKararMatrisi[1, 0]</td>
+                <td>@aStandartKararMatrisi[1, 1]</td>
+                <td>@aStandartKararMatrisi[1, 2]</td>
+                <td>@aStandartKararMatrisi[1, 3]</td>
+                <td>@aStandartKararMatrisi[1, 4]</td>
+            </tr>
+            <tr>
+                <th scope="row">Cengizhan Mahallesi</th>
+                <td>@aStandartKararMatrisi[2, 0]</td>
+                <td>@aStandartKararMatrisi[2, 1]</td>
+                <td>@aStandartKararMatrisi[2, 2]</td>
+                <td>@aStandartKararMatrisi[2, 3]</td>
+                <td>@aStandartKararMatrisi[2, 4]</td>
+            </tr>
+            <tr>
+                <th scope="row">Gümüşhaneliler Mahallesi</th>
+                <td>@aStandartKararMatrisi[3, 0]</td>
+                <td>@aStandartKararMatrisi[3, 1]</td>
+                <td>@aStandartKararMatrisi[3, 2]</td>
+                <td>@aStandartKararMatrisi[3, 3]</td>
+                <td>@aStandartKararMatrisi[3, 4]</td>
+            </tr>
+
+
+        </tbody>
+    </table>
+
+}
+
+
+@if (TempData["sKararMatrisi"] != null)
+{
+    <h3 style="color:red">3.Adım:Ağırlıklı Standart Karar Matrisinin (V) Oluşturulması</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nufus </th>
+                <th scope="col">Okul Sayisi </th>
+                <th scope="col">Hastane sayisi</th>
+                <th scope="col">Sehir Merkazine Uzaklık </th>
+                <th scope="col">AVM  Sayisi  </th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <th scope="row">Bilge Kaan Mahallesi</th>
+                <td>@skararMatrisi[0, 0]</td>
+                <td>@skararMatrisi[0, 1]</td>
+                <td>@skararMatrisi[0, 2]</td>
+                <td>@skararMatrisi[0, 3]</td>
+                <td>@skararMatrisi[0, 4]</td>
+            </tr>
+            <tr>
+                <th scope="row">Fatih Sultan Mehmet Han Mahallesi</th>
+                <td>@skararMatrisi[1, 0]</td>
+                <td>@skararMatrisi[1, 1]</td>
+                <td>@skararMatrisi[1, 2]</td>
+                <td>@skararMatrisi[1, 3]</td>
+                <td>@skararMatrisi[1, 4]</td>
+            </tr>
+            <tr>
+                <th scope="row">Cengizhan Mahallesi</th>
+                <td>@skararMatrisi[2, 0]</td>
+                <td>@skararMatrisi[2, 1]</td>
+                <td>@skararMatrisi[2, 2]</td>
+                <td>@skararMatrisi[2, 3]</td>
+                <td>@skararMatrisi[2, 4]</td>
+            </tr>
+            <tr>
+                <th scope="row">Gümüşhaneliler Mahallesi</th>
+                <td>@skararMatrisi[3, 0]</td>
+                <td>@skararMatrisi[3, 1]</td>
+                <td>@skararMatrisi[3, 2]</td>
+                <td>@skararMatrisi[3, 3]</td>
+                <td>@skararMatrisi[3, 4]</td>
+            </tr>
+
+
+        </tbody>
+    </table>
+
+}
+@if (TempData["iAyrım"] != null || TempData["negatifIdealAyrim"] != null)
+{
+    <h3 style="color:red">4. ve 5.Adım:İdeal (A* ) ve Negatif İdeal (A-) Çözümlerin Oluşturulması ve Ayırım Ölçülerinin Hesaplanması </h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">1</th>
+                <th scope="col">2</th>
+                <th scope="col">3</th>
+                <th scope="col">4</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <th scope="row">ideal Ayrim Degerleri</th>
+                <td>@idealAyrim[0]</td>
+                <td>@idealAyrim[1]</td>
+                <td>@idealAyrim[2]</td>
+                <td>@idealAyrim[3]</td>
+            </tr>
+            <tr>
+                <th scope="row">Negatif ideal Ayrim Degerleri</th>
+                <td>@negatifIdealAyrim[0]</td>
+                <td>@negatifIdealAyrim[1]</td>
+                <td>@negatifIdealAyrim[2]</td>
+                <td>@negatifIdealAyrim[3]</td>
+
+            </tr>
+        </tbody>
+    </table>
+
+}
+@if (TempData["sonuc"] != null)
+{
+    <h3 style="color:red">6.Adım:İdeal Çözüme Göreli Yakınlığın Hesaplanması(Sonuc) </h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Bilge Kaan Mahallesi</th>
+                <th scope="col">Fatih Sultan Mehmet Han Mahallesi</th>
+                <th scope="col">Cengizhan Mahallesi</th>
+                <th scope="col">Gümüşhaneliler Mahallesi </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <th scope="row">ideal Ayrim Degerleri</th>
+                <td>@sonuc[0]</td>
+                <td>@sonuc[1]</td>
+                <td>@sonuc[2]</td>
+                <td>@sonuc[3]</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+}
+@*@if (TempData["sonuclar"] != null)
+{
+    <h3 style="color:red">Sonuc </h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">@sonuclar[0]</th>
+                <th scope="col">@sonuclar[1]</th>
+                <th scope="col">@sonuclar[2]</th>
+                <th scope="col">@sonuclar[3]</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <th scope="row">Sonuc</th>
+                <td>@sonucSirali[0]</td>
+                <td>@sonucSirali[1]</td>
+                <td>@sonucSirali[2]</td>
+                <td>@sonucSirali[3]</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+}*@
+
+
+
